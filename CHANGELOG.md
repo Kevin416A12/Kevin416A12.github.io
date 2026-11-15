@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.7.2 — 2026-11-15
+
+- Ana's speech bubble is smaller so it covers less of the scene.
+- The AI-generated note moved from under the logo to Settings (Credits & AI use); it stays in CREDITS.md and the README.
+
+## 0.7.1 — 2026-11-15
+
+- Story intro is now one animated panel at a time (progressive disclosure) with Next / Start mission.
+- Ana sits on the scene (top-left), so the decision sheet uses the full width.
+- Progress bar: "Step 2 of 7 · 5 steps left", with ORION and Base Alpha as milestones.
+- Costs are explicit: every value carries its sign, and selecting a card shows before → after on each bar.
+- Go is outlined until a choice is made. Secondary buttons step back.
+- Stronger default glass blur; "Low effects" still turns it off. Smaller "AI-generated" label.
+- Ana's browser voice made more robust; "Test Ana's voice" in Settings.
+
 ## 0.7.0 — 2026-11-15 (iteration v7.3)
 
 - New name and identity: Junior Astronaut Mission Trainer — Saving Rover Orion. Team logo with an "AI-generated" label.

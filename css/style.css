@@ -220,3 +220,86 @@ body.lowfx #stage.storm, body.calm #stage.storm { box-shadow: 0 0 0 3px var(--or
 body.lowfx .res, body.lowfx #bubble, body.lowfx #dec, body.lowfx .signal, body.lowfx .round, body.lowfx .pill, body.lowfx .glassbtn, body.lowfx #btn-ask, body.lowfx .ntag i, body.lowfx #banner, body.lowfx #sheet, body.lowfx .sheetcard, body.lowfx #pop, body.lowfx #overlay { -webkit-backdrop-filter: none; backdrop-filter: none; }
 body.lowfx .res, body.lowfx #bubble, body.lowfx #dec, body.lowfx .signal, body.lowfx .round, body.lowfx .pill, body.lowfx .glassbtn, body.lowfx #btn-ask, body.lowfx #banner, body.lowfx #sheet, body.lowfx .sheetcard, body.lowfx #pop { background: var(--s700); }
 body.lowfx .opt { background: var(--s500); } body.lowfx #overlay { background: rgba(6, 14, 28, .88); } body.lowfx #bg { filter: none; opacity: .2; } body.lowfx #screen::after { background: rgba(9, 22, 43, .7); }
+
+/* ====================== v0.7.1: hierarchy, progress, story, stronger glass ====================== */
+/* Stronger liquid glass: brighter blurred backdrop, lighter tint, wider blur. */
+:root { --glass: rgba(34, 54, 86, .30); --glass-strong: rgba(24, 40, 66, .62); --glass-blur: blur(40px) saturate(1.9) brightness(1.06); --glass-edge: inset 0 1px 0 rgba(244, 241, 234, .42), inset 0 0 0 1px rgba(244, 241, 234, .16), 0 12px 34px rgba(4, 8, 18, .3); }
+#bg { inset: -8%; filter: blur(30px) brightness(.9) saturate(1.35); }
+#screen::after { background: linear-gradient(180deg, rgba(9, 22, 43, .30), rgba(9, 22, 43, .12) 40%, rgba(9, 22, 43, .34)); }
+#dec { background: rgba(30, 48, 78, .34); }
+.opt { background: rgba(16, 30, 52, .58); } .opt.sel { background: rgba(52, 84, 122, .86); }
+#banner, #sheet, .sheetcard, #pop { background: rgba(24, 40, 66, .72); }
+#overlay { background: rgba(6, 14, 28, .42); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4); }
+
+/* Layout: Ana sits on the scene (bottom-left), so the decision sheet gets the full width. */
+#ui { grid-template-columns: minmax(0, 1fr); grid-template-areas: "top" "hud" "stage" "dec"; }
+#ana { grid-area: stage; align-self: end; justify-self: start; max-width: 46%; padding: 0 0 10px 10px; gap: .3em; pointer-events: none; }
+#ana > * { pointer-events: auto; }
+#portrait { height: 15cqh; margin-top: 0; }
+#bubble { align-self: flex-end; min-height: 0; padding: .45em .75em .5em; gap: .1em; background: var(--glass-strong); border-radius: 18px 18px 18px 6px; }
+#caption { font-size: .78em; line-height: 1.25; } #who { font-size: .5em; }
+#btn-ask { min-height: 40px; font-size: .6em; margin-top: .25em; background: rgba(244, 241, 234, .12); }
+#lapse { bottom: auto; top: 4.2em; } #log { bottom: 12px; left: auto; right: 14px; transform: none; max-width: 48%; } #illus { bottom: auto; top: 4.6em; right: 14px; opacity: .7; }
+
+/* Hierarchy: one primary action (Go). Everything secondary steps back. */
+.round { background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; opacity: .78; min-width: 44px; height: 44px; padding: 0 6px; }
+.glassbtn { font-size: .56em; font-weight: 600; min-height: 44px; opacity: .9; } .glassbtn .ic svg { width: 1.4em; height: 1.4em; }
+#stage-title { font-weight: 600; font-size: .6em; opacity: .85; } #stage-title small { color: var(--ink); margin: 0; }
+.ask { font-size: .92em; margin: 0 .2em .1em; }
+.sigrow, .note { opacity: .75; } .tg { font-size: .56em; }
+.rows-cap { font-size: .52em; color: var(--ink2); letter-spacing: .02em; }
+.row b { font-size: 1.08em; }
+#go { font-size: 1em; box-shadow: 0 8px 26px rgba(4, 8, 18, .35); }
+#go:disabled { opacity: 1; background: transparent; color: rgba(244, 241, 234, .72); box-shadow: inset 0 0 0 2px rgba(244, 241, 234, .38); font-weight: 600; }
+/* Before -> after on the bars when a card is selected. */
+.res-val em { font-style: normal; font-family: var(--ui); opacity: .7; margin: 0 .1em; }
+.res.preview .res-val { color: var(--ink); background: rgba(244, 241, 234, .14); border-radius: 8px; padding: 0 .35em; box-shadow: inset 0 0 0 1px rgba(244, 241, 234, .3); }
+
+/* Progress: where am I, how much is left. */
+#progress { gap: 5px; padding: 0 .6em; }
+#progress .p-lab { display: flex; align-items: baseline; gap: .1em; font-size: .7em; color: var(--ink2); white-space: nowrap; overflow: hidden; }
+#progress .p-lab b { color: var(--ink); font-size: 1.12em; } .p-left { margin-left: auto; padding-left: .8em; color: var(--ink); font-weight: 600; }
+.p-bar { display: flex; align-items: center; gap: 5px; } .p-bar i { flex: 1; height: 9px; border-radius: 999px; background: rgba(244, 241, 234, .2); }
+.p-bar i.done { background: var(--lime); } .p-bar i.now { background: var(--ink); box-shadow: 0 0 0 3px rgba(244, 241, 234, .22); }
+.p-bar .mile { flex: none; width: 1.25em; height: 1.25em; color: rgba(244, 241, 234, .45); } .p-bar .mile svg { width: 100%; height: 100%; } .p-bar .mile.done { color: var(--lime); }
+
+/* Story intro: one panel at a time, animated. */
+.sheetcard.startcard { width: min(100%, 860px); padding: 1em 1.3em 1.1em; }
+.start-head { gap: .7em; margin-bottom: .2em; } .start-head img { height: 3.6em; } .logo-wrap { position: relative; display: grid; justify-items: center; }
+.logo-wrap .ai { position: absolute; bottom: -9px; font-size: 7px; padding: 0 3px; background: rgba(9, 22, 43, .85); opacity: .8; white-space: nowrap; }
+.brand { position: relative; } .brand .ai { font-size: 7px; padding: 0 3px; opacity: .7; }
+.story { margin: .7em 0 .5em; border-radius: 22px; overflow: hidden; background: var(--s900); box-shadow: inset 0 0 0 1px var(--line); cursor: pointer; text-align: left; }
+.story-pic svg { width: 100%; height: auto; max-height: 46cqh; display: block; }
+.story-pic.in { opacity: 0; transform: scale(1.03); } .story-pic.in.go { opacity: 1; transform: none; transition: opacity .45s var(--ease), transform .7s var(--ease); }
+.story-text { margin: 0; padding: .6em .9em .75em; font-size: 1.05em; font-weight: 600; color: var(--ink) !important; min-height: 3.2em; }
+.story-foot { display: flex; align-items: center; justify-content: space-between; gap: 1em; } .story-dots { display: flex; gap: 8px; }
+.story-dots i { width: 10px; height: 10px; border-radius: 50%; background: rgba(244, 241, 234, .25); transition: all .3s var(--spring); } .story-dots i.was { background: var(--lime); } .story-dots i.on { background: var(--ink); width: 26px; border-radius: 999px; }
+.p-drive, .p-pop, .p-tw, .p-fall, .p-flash, .p-wave, .p-batt { transform-box: fill-box; transform-origin: center; }
+.p-drive { animation: pDrive 1.5s cubic-bezier(.2, .8, .2, 1) both; } @keyframes pDrive { from { transform: translateX(-150px); } }
+.p-pop { transform-origin: 50% 100%; animation: pPop .6s var(--spring) 1.2s both; } @keyframes pPop { from { transform: scale(0); opacity: 0; } }
+.p-tw { animation: pTw 1.6s ease-in-out 1.6s infinite both; } .p-tw.t2 { animation-delay: 1.9s; } .p-tw.t3 { animation-delay: 2.2s; } @keyframes pTw { 0% { transform: scale(0); opacity: 0; } 40% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(.85); opacity: .75; } }
+/* Low gravity: a slow fall into the crater, one soft bounce. */
+.p-fall { animation: pFall 1.7s cubic-bezier(.45, 0, .9, .6) both; } @keyframes pFall { 0% { transform: translate(-120px, -70px) rotate(14deg); } 78% { transform: translate(0, 0) rotate(0); } 88% { transform: translate(0, -6px); } 100% { transform: none; } }
+.p-flash { animation: pFlash .9s steps(2, jump-none) 1.7s 3 both; } @keyframes pFlash { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 1; } }
+.p-wave { animation: pWave 1.8s ease-out infinite both; } .p-wave.v2 { animation-delay: .3s; } .p-wave.v3 { animation-delay: .6s; } @keyframes pWave { 0% { opacity: 0; } 35% { opacity: 1; } 100% { opacity: .12; } }
+.p-batt { animation: pBatt 1s steps(2, jump-none) infinite; } @keyframes pBatt { 50% { opacity: .2; } }
+
+@container screen (max-height: 520px) {
+  #ui { grid-template-columns: 52% minmax(0, 1fr); grid-template-areas: "top hud" "stage dec"; }
+  #ana { padding: 0 6px 6px; max-width: 100%; } #portrait { height: 26cqh; } #illus { top: auto; bottom: 4px; } #lapse { display: none; }
+  #progress .p-full, .p-left { display: none; } #progress .p-lab { font-size: 10px; } .p-bar i { height: 6px; } .p-bar { gap: 3px; } .p-bar .mile { display: none; }
+  .story-pic svg { max-height: 40cqh; } .story-text { font-size: .95em; min-height: 0; padding: .4em .7em; } .start-head img { height: 2.6em; } .start-head h2 { font-size: .9em; } .rows-cap { display: none; }
+  .round { min-width: 40px; height: 44px; padding: 0 3px; }
+}
+body.lowfx #dec { background: var(--s700); } body.lowfx #bubble { background: var(--s700); } body.lowfx .round { background: transparent; }
+/* Ana sits in the top-left of the scene: the sky / emptiest corner in every scene. */
+#ana { align-self: start; align-items: flex-start; max-width: 44%; padding: 10px 0 0 10px; }
+#bubble { align-self: flex-start; border-radius: 6px 18px 18px 18px; margin-top: .4em; }
+#stage-title { top: auto; bottom: 10px; left: 12px; } #lapse { top: auto; bottom: 10px; }
+.story-pic svg { width: 100%; height: 42cqh; max-height: none; }
+@container screen (max-height: 520px) { #ana { align-self: end; align-items: flex-end; padding: 0 6px 6px; max-width: 100%; } #bubble { align-self: flex-end; border-radius: 18px 18px 18px 6px; margin: 0; } .story-pic svg { height: 38cqh; } }
+/* v0.7.2: smaller Ana bubble */
+#ana { max-width: 35%; gap: 6px; } #portrait { height: 12.5cqh; }
+#bubble { padding: .35em .6em .4em; } #caption { font-size: .66em; line-height: 1.28; } #who { font-size: .44em; }
+#btn-ask { min-height: 34px; font-size: .52em; padding: 0 .7em 0 .5em; margin-top: .2em; }
+@container screen (max-height: 520px) { #ana { max-width: 62%; } #portrait { height: 22cqh; } #caption { font-size: .72em; } }

@@ -138,6 +138,11 @@
     const g = S.game;
     for (const k of RES) {
       const el = $('ghost-' + k), r = P.resources[k], v = g.resources[k];
+      // Before -> after, right on the bar: the cost can be read without any arithmetic.
+      const sh = c ? Game.shown(c) : null, val = $('val-' + k), box = $('res-' + k);
+      if (c && sh && Math.abs(sh[k]) > 0.05) { val.innerHTML = `${fmt(k, v)} <em>→</em> ${fmt(k, Math.max(0, Math.min(r.start, v - sh[k])))}`; box.classList.add('preview'); }
+      else if (c && !sh && c.range && c.range[k]) { val.innerHTML = `${fmt(k, v)} <em>→</em> ${fmt(k, Math.max(0, v - c.range[k][1]))}–${fmt(k, Math.max(0, v - c.range[k][0]))}`; box.classList.add('preview'); }
+      else { val.textContent = fmt(k, Math.max(0, v)); box.classList.remove('preview'); }
       if (!c) { el.className = 'bar-ghost'; continue; }
       const s = Game.shown(c);
       if (!s && c.range && c.range[k]) { const lo = v - c.range[k][1], hi = v - c.range[k][0]; el.style.left = (100 * Math.max(0, lo) / r.start).toFixed(1) + '%'; el.style.width = (100 * (v - Math.max(0, lo)) / r.start).toFixed(1) + '%'; el.className = 'bar-ghost on range'; el.title = hi; continue; }
@@ -169,16 +174,12 @@
     if (low && to > 0 && !S.sigLowSaid) { S.sigLowSaid = true; return true; }
     return false;
   }
+  // Progress: where am I, and how much of the mission is left.
   function progress() {
-    const g = S.game, n = Math.min(g.index, 6), ev = P.events[n], l1 = P.events.filter((e) => e.level === 1).length, lv = g.arrived || n >= l1 ? 2 : 1;
-    const step = lv === 1 ? n + 1 : n - l1 + 1, of = lv === 1 ? l1 : P.events.length - l1;
-    const x = (i) => 12 + i * (276 / 7);
-    let dots = ''; for (let i = 0; i <= 7; i++) dots += `<circle cx="${x(i)}" cy="12" r="${i === 0 || i === 4 || i === 7 ? 5 : 3}" fill="${i <= g.index ? '#A4E46A' : i > 4 && lv === 1 ? '#56687a' : '#F4F1EA'}"/>`;
-    $('progress').innerHTML = `<span class="p-lab"><span class="p-full"><b>Level ${lv}</b> · ${P.levels[lv]} · Step ${Math.min(step, of)} of ${of}</span><span class="p-short"><b>Level ${lv}</b> · ${Math.min(step, of)}/${of}</span></span>
-      <svg viewBox="0 0 300 24" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path d="M12 12H288" stroke="#F4F1EA" stroke-opacity=".4" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round"/>
-      <path d="M12 12H${x(g.index)}" stroke="#A4E46A" stroke-width="3" stroke-linecap="round"/>${dots}
-      <g transform="translate(${x(g.index)} 12)"><rect x="-9" y="-9" width="18" height="12" rx="3" fill="#F4F1EA" stroke="#09162B" stroke-width="1.500"/><rect x="-6" y="-5" width="9" height="4" fill="#E8822C"/><circle cx="-5" cy="5" r="3.200" fill="#09162B"/><circle cx="5" cy="5" r="3.200" fill="#09162B"/></g>
-      <text x="${x(4)}" y="24" font-size="8" fill="#c9d2dc" text-anchor="middle">ORION</text></svg>`;
+    const g = S.game, total = P.events.length, n = Math.min(g.index, total - 1), ev = P.events[n], over = g.status !== 'running', left = over ? 0 : total - g.index - 1;
+    const l1 = P.events.filter((e) => e.level === 1).length;
+    const segs = P.events.map((e, i) => `<i class="${i < g.index || over ? 'done' : i === g.index ? 'now' : ''}" title="${esc(e.title)}"></i>${i === l1 - 1 ? `<span class="mile ${g.arrived ? 'done' : ''}" title="ORION">${ICON.signal}</span>` : ''}`).join('') + `<span class="mile ${over ? 'done' : ''}" title="Base Alpha">${ICON.home}</span>`;
+    $('progress').innerHTML = `<span class="p-lab"><b>${over ? 'Mission report' : `Step ${n + 1} of ${total}`}</b><span class="p-full"> · ${over ? '' : esc(ev.title)}</span><span class="p-left">${over ? '' : left === 0 ? 'Last step' : left + (left === 1 ? ' step left' : ' steps left')}</span></span><span class="p-bar" role="progressbar" aria-valuemin="0" aria-valuemax="${total}" aria-valuenow="${g.index}">${segs}</span>`;
   }
 
   // ---------- stage ----------
@@ -201,13 +202,13 @@
   function nasaTags(ev) {
     const sc = S.game.scenario;
     return ({
-      signal_loss: [{ t: 'NASA map', x: 62, y: 62, s: "NASA's height map shows hills block ORION's signal to our base.", d: 'LRO LOLA height map + our calculation' }],
-      route_choice: ev.leg === 'out' ? [{ t: 'NASA map', x: 50, y: 9, s: "A NASA spacecraft measured the Moon with a laser. That's how we know each road's steepness.", d: 'LRO LOLA, 5 m map' },
-        { t: 'NASA rover speed', x: 22, y: 84, s: "SCOUT drives as slowly as NASA's VIPER rover: 10 cm each second.", d: 'NASA VIPER documents' }]
-        : [{ t: 'NASA map', x: 50, y: 9, s: 'Home is about 16 m higher, so the trip back is uphill.', d: 'LRO LOLA height map' }],
+      signal_loss: [{ t: 'NASA map', x: 66, y: 24, s: "NASA's height map shows hills block ORION's signal to our base.", d: 'LRO LOLA height map + our calculation' }],
+      route_choice: ev.leg === 'out' ? [{ t: 'NASA map', x: 62, y: 9, s: "A NASA spacecraft measured the Moon with a laser. That's how we know each road's steepness.", d: 'LRO LOLA, 5 m map' },
+        { t: 'NASA rover speed', x: 72, y: 91, s: "SCOUT drives as slowly as NASA's VIPER rover: 10 cm each second.", d: 'NASA VIPER documents' }]
+        : [{ t: 'NASA map', x: 62, y: 9, s: 'Home is about 16 m higher, so the trip back is uphill.', d: 'LRO LOLA height map' }],
       low_light: [{ t: 'NASA map + camera', x: 50, y: 62, s: "NASA's camera watched this place for a year. Sunlight here only about 1 hour in 3.", d: 'LROC WAC + our shadow calculation' },
         { t: 'NASA map', card: 'booster', s: 'The height map shows where hills block the radio signal.', d: 'LRO LOLA + our calculation' }],
-      particle_alert: [{ t: 'Real storm', x: 50, y: 9, s: `This solar storm really happened on ${niceDate(sc.sep.day)}, 2024.`, d: 'NASA CCMC DONKI' },
+      particle_alert: [{ t: 'Real storm', x: 62, y: 9, s: `This solar storm really happened on ${niceDate(sc.sep.day)}, 2024.`, d: 'NASA CCMC DONKI' },
         { t: 'NASA research', card: 'crater', s: 'NASA scientists found crater walls block about 40% of the particles.', d: 'Phipps et al., NASA GSFC' }],
     })[ev.type] || [];
   }
@@ -239,13 +240,13 @@
     }
     return { gain, cost: costT };
   }
-  function valueText(k, v) { if (Math.abs(v) < 0.05) return 'none'; return k === 'time' ? `${fmt(k, v)} h` : `${v > 0 ? '−' : '+'}${fmt(k, v)}%`; }
+  function valueText(k, v) { if (Math.abs(v) < 0.05) return 'none'; return k === 'time' ? `${v > 0 ? '−' : '+'}${fmt(k, v)} h` : `${v > 0 ? '−' : '+'}${fmt(k, v)}%`; }
   function rowsHtml(c, all) {
     const s = Game.shown(c), known = all.filter((x) => !x.locked && Game.shown(x)).map((x) => Game.shown(x));
     const norm = (k, v) => Math.max(0, v) / (P.resources[k].start - P.resources[k].reserve);
     let max = 0.01; for (const x of known) for (const k of RES) max = Math.max(max, norm(k, x[k])); if (!s && c.range) for (const k of ['time', 'battery']) max = Math.max(max, norm(k, c.range[k][1]));
-    return `<div class="rows">${RES.map((k) => {
-      if (!s) { const rg = c.range && c.range[k]; return `<div class="row t-${k}">${ICON[k]}<span class="lab">${NAME[k]}</span><span class="cbar">${rg ? `<i class="rng" style="left:${(100 * norm(k, rg[0]) / max).toFixed(0)}%;width:${(100 * (norm(k, rg[1]) - norm(k, rg[0])) / max).toFixed(0)}%"></i>` : ''}</span><b>${rg ? (k === 'time' ? `${rg[0]}–${rg[1]} h` : `−${rg[0]}–${rg[1]}%`) : 'not sure'}</b></div>`; }
+    return `<div class="rows"><span class="rows-cap">This choice costs</span>${RES.map((k) => {
+      if (!s) { const rg = c.range && c.range[k]; return `<div class="row t-${k}">${ICON[k]}<span class="lab">${NAME[k]}</span><span class="cbar">${rg ? `<i class="rng" style="left:${(100 * norm(k, rg[0]) / max).toFixed(0)}%;width:${(100 * (norm(k, rg[1]) - norm(k, rg[0])) / max).toFixed(0)}%"></i>` : ''}</span><b>${rg ? (k === 'time' ? `−${rg[0]} to ${rg[1]} h` : `−${rg[0]} to ${rg[1]}%`) : 'not sure'}</b></div>`; }
       const least = known.length > 1 && known.every((x) => x[k] >= s[k] - 1e-9) && known.some((x) => x[k] > s[k] + 0.05);
       return `<div class="row t-${k}">${ICON[k]}<span class="lab">${NAME[k]}</span><span class="cbar"><i style="width:${(100 * norm(k, s[k]) / max).toFixed(0)}%"></i></span><b>${valueText(k, s[k])}${least ? ' <span class="least">least</span>' : ''}</b></div>`; }).join('')}</div>`;
   }
@@ -267,10 +268,10 @@
   function showEvent() {
     const g = S.game, ev = g.event, n = g.index + 1; S.sel = null; S.busy = false; S.choices = g.choices(); S.tags = nasaTags(ev);
     progress(); updateHud(); ghost(null); sceneFor(ev); $('pop').classList.remove('on');
-    $('stage-title').innerHTML = `<small>Step ${n} of ${P.events.length}</small>${esc(ev.title)}`;
+    $('stage-title').innerHTML = '';
     $('tags').innerHTML = S.tags.map((t, i) => (t.x != null ? tagHtml(t, i) : '')).join(''); $('lapse').textContent = ''; $('stamp').className = '';
     $('log').textContent = ev.level === 2 && !g.flags.repaired ? 'ORION LOG: battery 18%... ice data safe... waiting.' : '';
-    $('dec').innerHTML = `<p class="ask">${esc(ev.ask)}</p><div class="cards">${S.choices.map((c, i) => cardHtml(c, i, S.choices, ev)).join('')}</div><button id="go" disabled>Choose an option</button>`;
+    $('dec').innerHTML = `<p class="ask">${esc(ev.ask)}</p><div class="cards">${S.choices.map((c, i) => cardHtml(c, i, S.choices, ev)).join('')}</div><button id="go" disabled>Pick one first</button>`;
     document.querySelectorAll('.opt').forEach((el) => {
       el.onclick = (e) => { if (S.busy || e.target.closest('.ntag')) return; if (el.dataset.locked) { sfx('warning'); say('e6_locked'); return; } select(el.dataset.id); };
       el.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); } };
@@ -415,16 +416,19 @@
     $('shelf-count').textContent = S.shelf.size; $('dec').innerHTML = ''; $('tags').innerHTML = ''; $('log').textContent = ''; $('lapse').textContent = ''; $('stage-title').innerHTML = '<small>Level 1</small>' + P.levels[1];
     closeBanner(); closeSheet(); $('caption').textContent = "I'm Ana. Let's save ORION together."; setAna('calm');
     const sc = S.game.scenario, day = sc.sun.key === '0.5deg' ? 'A hard day: Battery will be tight.' : sc.sun.key === '1.0deg' ? 'A medium day.' : 'A bright day, good for learning.';
-    overlay(`<button class="skip" id="skip">Skip</button><div class="start-head"><div style="display:grid;justify-items:center;gap:4px"><img src="assets/brand/logo.png" alt="Saving Rover Orion logo"><span class="ai">AI-generated</span></div><div><h2>${P.title}</h2><p>${P.subtitle}</p></div></div>
-      <div class="panels">${[1, 2, 3].map((n) => `<div class="panel" id="pn-${n}">${A.panel(n)}<p>${esc(LINES['story_' + n].text)}</p></div>`).join('')}</div>
-      <div class="btnrow" id="start-row" style="visibility:hidden"><button class="primary auto" id="go-start">Start mission</button></div>
-      <p class="fine">Today on the Moon: ${esc(sc.sun.text)} ${day} · Day code ${S.seed}</p>`);
-    let shown = false, timers = [];
-    const showAll = () => { if (shown) return; shown = true; timers.forEach(clearTimeout); [1, 2, 3].forEach((n) => $('pn-' + n).classList.add('on')); $('start-row').style.visibility = 'visible'; };
-    const run = () => { [1, 2, 3].forEach((n, i) => timers.push(setTimeout(() => $('pn-' + n).classList.add('on'), 100 + i * 300))); timers.push(setTimeout(showAll, quick() ? 400 : 1600)); };
-    run();
-    $('overlay').onclick = (e) => { if (e.target.closest('#go-start')) return; if (!S.unlocked) { S.unlocked = true; setMusic('menu'); if (!shown) say(['story_1', 'story_2', 'story_3']); } showAll(); };
-    $('go-start').onclick = () => { S.unlocked = true; sfx('go'); $('overlay').onclick = null; closeOverlay(); setMusic('mission'); showEvent(); };
+    overlay(`<button class="skip" id="skip">Skip</button><div class="start-head"><div class="logo-wrap"><img src="assets/brand/logo.png" alt="Saving Rover Orion logo"></div><div><h2>${P.title}</h2><p>${P.subtitle}</p></div></div>
+      <div class="story" id="story"><div class="story-pic" id="story-pic"></div><p class="story-text" id="story-text"></p></div>
+      <div class="story-foot"><span class="story-dots" id="story-dots"></span><button class="primary auto" id="story-next">Next</button></div>
+      <p class="fine">Today on the Moon: ${esc(sc.sun.text)} ${day} · Day code ${S.seed}</p>`, 'startcard');
+    let n = 0;
+    const start = () => { S.unlocked = true; sfx('go'); closeOverlay(); setMusic('mission'); showEvent(); };
+    const show = (k) => { n = k; const pic = $('story-pic'); pic.innerHTML = A.panel(k); pic.className = 'story-pic in'; void pic.offsetWidth; pic.className = 'story-pic in go';
+      $('story-text').textContent = LINES['story_' + k].text; $('story-dots').innerHTML = [1, 2, 3].map((i) => `<i class="${i === k ? 'on' : i < k ? 'was' : ''}"></i>`).join('');
+      $('story-next').textContent = k === 3 ? 'Start mission' : 'Next'; if (S.unlocked) { $('caption').textContent = LINES['story_' + k].text; setAna(LINES['story_' + k].mood); speak(['story_' + k]); } };
+    const advance = () => { if (!S.unlocked) { S.unlocked = true; setMusic('menu'); } if (n >= 3) return start(); sfx('tap'); show(n + 1); };
+    show(1);
+    $('story-next').onclick = advance; $('story').onclick = () => { if (n < 3) advance(); else if (!S.unlocked) { S.unlocked = true; setMusic('menu'); speak(['story_3']); } };
+    $('skip').onclick = start;
   }
 
   function ending() {
@@ -498,7 +502,7 @@
       <p class="fine" id="voice-name">Voice in use: ${esc(Voice.name)}${Object.keys(VOICE).length ? ` · ${Object.keys(VOICE).length} recorded lines` : ''}. On iPad, turn Silent mode off to hear sound.</p>
       <h2 style="margin-top:.8em">Credits</h2><p class="fine">${TEAM}</p>
       <p class="fine">Data: NASA LRO/LOLA (PGDA Site01), LROC WAC (Speyerer &amp; Robinson 2013), NASA CCMC DONKI, NASA VIPER documents, Phipps et al. (NASA GSFC). Music: Pixabay. Sounds: Kenney (CC0). Font: Michroma (OFL). Icons: Phosphor (MIT).</p>
-      <p class="fine">AI use: the team logo is AI-generated; code, code-drawn art and text were made with AI assistance and checked by the team. ORION, SCOUT and Base Alpha are fiction. NASA does not endorse this game.</p>`);
+      <p class="fine"><b>Credits &amp; AI use.</b> The team logo is AI-generated; code, code-drawn art and text were made with AI assistance and checked by the team. ORION, SCOUT and Base Alpha are fiction. NASA does not endorse this game.</p>`);
     const bind = (id, fn) => { $(id).onclick = () => { const on = $(id).getAttribute('aria-checked') !== 'true'; $(id).setAttribute('aria-checked', on); sfx('tap'); fn(on); }; };
     bind('t-music', (on) => { S.musicOn = on; musicVolume(Music.cur); }); $('t-vol').oninput = (e) => { S.musicVol = e.target.value / 100; musicVolume(Music.cur); };
     $('t-test').onclick = () => { S.unlocked = true; pickVoice(); speak(['nasa_first']); setTimeout(() => { const n = $('voice-name'); if (n) n.textContent = 'Voice in use: ' + Voice.name + ('speechSynthesis' in window ? ' · ' + speechSynthesis.getVoices().length + ' voices on this device' : ''); }, 400); };

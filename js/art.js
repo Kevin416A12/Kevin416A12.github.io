@@ -168,7 +168,7 @@
   // Wide stages crop the picture (slice); narrow stages show all of it (meet) and
   // the oversized sky and ground rectangles fill the rest.
   function wrap(inner, label, fit) {
-    return `<svg viewBox="0 0 1200 500" preserveAspectRatio="xMidYMid ${fit || 'slice'}" overflow="visible" role="img" aria-label="${label}">${inner}</svg>`;
+    return `<svg viewBox="-120 0 1200 500" preserveAspectRatio="xMidYMid ${fit || 'slice'}" overflow="visible" role="img" aria-label="${label}">${inner}</svg>`;
   }
 
   const ROUTE_STYLE = {
@@ -210,7 +210,7 @@
         ${r}
         <g transform="translate(200 300)"><circle r="22" fill="#F4F1EA" stroke="#09162B" stroke-width="4"/><path d="M-10 6a10 10 0 0 1 20 0z" fill="#09162B"/></g>${chip(200, 256, 'Base Alpha')}
         <g transform="translate(1000 330)"><circle r="24" fill="#1C2E4A" stroke="#E8822C" stroke-width="5"/><circle r="7" fill="#E8822C"/></g>${chip(1000, 384, 'ORION')}
-        <g transform="translate(1140 200)"><circle r="16" fill="#fbf6e6"/><path d="M-30 0h-50" stroke="#fbf6e6" stroke-width="4" stroke-linecap="round"/><path d="M-80 0l14-9v18z" fill="#fbf6e6"/></g>
+        <g transform="translate(1040 120)"><circle r="16" fill="#fbf6e6"/><path d="M-30 0h-50" stroke="#fbf6e6" stroke-width="4" stroke-linecap="round"/><path d="M-80 0l14-9v18z" fill="#fbf6e6"/></g>
         ${mover}`, 'Map sketch from Base Alpha to ORION with three roads', o.fit);
     },
     shadow(o) {
@@ -239,14 +239,14 @@
     const g = `<rect width="400" height="260" fill="${SKY}"/><path d="M0 150L90 132 180 146 260 120 400 140V260H0z" fill="${SHADE}"/><path d="M260 120L330 146 300 152z" fill="${LIT}"/><path d="M0 178Q200 160 400 172V260H0z" fill="${LIT}"/>`;
     const sun = '<circle cx="350" cy="138" r="9" fill="#fbf6e6"/>';
     const star = (x, y, r, c) => `<path d="M${x} ${y - r}l${r * 0.280} ${r * 0.720} ${r * 0.720} ${r * 0.280}-${r * 0.720} ${r * 0.280}-${r * 0.280} ${r * 0.720}-${r * 0.280}-${r * 0.720}-${r * 0.720}-${r * 0.280} ${r * 0.720}-${r * 0.280}z" fill="${c}"/>`;
-    if (n === 1) return `<svg viewBox="0 0 400 260" role="img" aria-label="ORION finds ice">${g}${sun}${orion(150, 176, 0.620, '#A4E46A')}
-      <path d="M262 214l14-26 16 8 12-20 14 38z" fill="#bfe3ff" stroke="#F4F1EA" stroke-width="3" stroke-linejoin="round"/>${star(300, 150, 16, '#F4F1EA')}${star(336, 186, 9, '#6FA8DC')}${star(258, 172, 8, '#F4F1EA')}</svg>`;
-    if (n === 2) return `<svg viewBox="0 0 400 260" role="img" aria-label="ORION falls into a dark crater">${g}${sun}<ellipse cx="200" cy="214" rx="170" ry="40" fill="#c4c4bf"/><ellipse cx="200" cy="220" rx="150" ry="32" fill="${SHADE}"/>
-      <g transform="rotate(-14 200 200)" opacity=".9">${orion(200, 190, 0.620, '#5a3a30')}</g><path d="M236 96l-10 14 12 4-10 16" fill="none" stroke="#E8822C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-    return `<svg viewBox="0 0 400 260" role="img" aria-label="A weak beacon calls for help">${g}<ellipse cx="200" cy="214" rx="170" ry="40" fill="#c4c4bf"/><ellipse cx="200" cy="220" rx="150" ry="32" fill="${SHADE}"/>
+    if (n === 1) return `<svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" role="img" aria-label="ORION finds ice">${g}${sun}<g class="p-drive">${orion(150, 176, 0.620, '#A4E46A')}</g>
+      <g class="p-pop"><path d="M262 214l14-26 16 8 12-20 14 38z" fill="#bfe3ff" stroke="#F4F1EA" stroke-width="3" stroke-linejoin="round"/></g><g class="p-tw t1">${star(300, 150, 16, '#F4F1EA')}</g><g class="p-tw t2">${star(336, 186, 9, '#6FA8DC')}</g><g class="p-tw t3">${star(258, 172, 8, '#F4F1EA')}</g></svg>`;
+    if (n === 2) return `<svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" role="img" aria-label="ORION falls into a dark crater">${g}${sun}<ellipse cx="200" cy="214" rx="170" ry="40" fill="#c4c4bf"/><ellipse cx="200" cy="220" rx="150" ry="32" fill="${SHADE}"/>
+      <g class="p-fall"><g transform="rotate(-14 200 200)" opacity=".9">${orion(200, 190, 0.620, '#5a3a30')}</g></g><path class="p-flash" d="M236 96l-10 14 12 4-10 16" fill="none" stroke="#E8822C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+    return `<svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" role="img" aria-label="A weak beacon calls for help">${g}<ellipse cx="200" cy="214" rx="170" ry="40" fill="#c4c4bf"/><ellipse cx="200" cy="220" rx="150" ry="32" fill="${SHADE}"/>
       <g transform="rotate(-14 200 200)" opacity=".9">${orion(200, 190, 0.620, '#E8822C')}</g>
-      <path d="M150 96a70 70 0 0 1 100 0M128 72a104 104 0 0 1 144 0M106 48a138 138 0 0 1 188 0" fill="none" stroke="#F4F1EA" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 10"/>
-      <g transform="translate(318 66)"><rect x="-26" y="-14" width="48" height="28" rx="5" fill="none" stroke="#F4F1EA" stroke-width="4"/><rect x="24" y="-6" width="6" height="12" fill="#F4F1EA"/><rect x="-21" y="-9" width="9" height="18" fill="#E8822C"/></g></svg>`;
+      <g fill="none" stroke="#F4F1EA" stroke-width="4" stroke-linecap="round" stroke-dasharray="3 10"><path class="p-wave v1" d="M150 96a70 70 0 0 1 100 0"/><path class="p-wave v2" d="M128 72a104 104 0 0 1 144 0"/><path class="p-wave v3" d="M106 48a138 138 0 0 1 188 0"/></g>
+      <g transform="translate(318 66)"><rect x="-26" y="-14" width="48" height="28" rx="5" fill="none" stroke="#F4F1EA" stroke-width="4"/><rect x="24" y="-6" width="6" height="12" fill="#F4F1EA"/><rect class="p-batt" x="-21" y="-9" width="9" height="18" fill="#E8822C"/></g></svg>`;
   }
 
   window.SRO_ART = { ICON, ana, scenes, panel, scout, ROUTE_STYLE };
