@@ -78,13 +78,21 @@
   function speak(ids) {
     hush(); if (!S.sound || !S.voiceOn || !S.unlocked) return;
     const my = Voice.token; let i = 0; duck(true);
+    if (!Voice.voice) pickVoice();
     const next = () => {
       if (my !== Voice.token) return; if (i >= ids.length) { duck(false); return; }
       const id = ids[i++], text = LINES[id].text;
       if (VOICE[id]) { const a = new Audio('audio/voice/ana/' + VOICE[id]); Voice.audio = a; a.onended = next; a.onerror = () => tts(text, next); const p = a.play(); if (p && p.catch) p.catch(() => tts(text, next)); } else tts(text, next);
     };
-    const tts = (text, done) => { if (!('speechSynthesis' in window)) { duck(false); return; } const u = new SpeechSynthesisUtterance(text); if (Voice.voice) u.voice = Voice.voice; u.lang = 'en-US'; u.rate = 0.95; u.pitch = 1.1; u.onend = done; u.onerror = () => duck(false); speechSynthesis.speak(u); };
-    next();
+    const tts = (text, done) => {
+      if (!('speechSynthesis' in window)) { duck(false); return; }
+      const u = new SpeechSynthesisUtterance(text); if (Voice.voice) u.voice = Voice.voice; u.lang = 'en-US'; u.rate = 0.95; u.pitch = 1.1; u.volume = 1;
+      u.onend = done; u.onerror = () => duck(false);
+      Voice.utter = u; // keep a reference: some browsers drop an utterance that is garbage-collected
+      try { if (speechSynthesis.paused) speechSynthesis.resume(); speechSynthesis.speak(u); } catch (e) { duck(false); }
+    };
+    // Safari and Chrome can swallow a line spoken in the same instant as cancel(): wait a moment first.
+    setTimeout(next, 90);
   }
   function say(ids, opts) {
     ids = [].concat(ids); const o = opts || {};
@@ -486,12 +494,14 @@
     openSheet(`<h2>Settings</h2>${tg('t-music', 'Music', 'Starts after your first tap.', S.musicOn)}
       <div class="toggle"><span>Music volume</span><input type="range" id="t-vol" min="0" max="100" value="${Math.round(S.musicVol * 100)}" aria-label="Music volume"></div>
       ${tg('t-voice', "Ana's voice", 'Captions always stay on.', S.voiceOn)}${tg('t-low', 'Low effects', 'No blur, no particles.', S.lowfx)}${tg('t-calm', 'Calm mode', 'No shake, no movement.', S.calm)}
+      <div class="btnrow" style="justify-content:flex-start;margin:.5em 0"><button class="secondary" id="t-test">Test Ana's voice</button></div>
       <p class="fine" id="voice-name">Voice in use: ${esc(Voice.name)}${Object.keys(VOICE).length ? ` · ${Object.keys(VOICE).length} recorded lines` : ''}. On iPad, turn Silent mode off to hear sound.</p>
       <h2 style="margin-top:.8em">Credits</h2><p class="fine">${TEAM}</p>
       <p class="fine">Data: NASA LRO/LOLA (PGDA Site01), LROC WAC (Speyerer &amp; Robinson 2013), NASA CCMC DONKI, NASA VIPER documents, Phipps et al. (NASA GSFC). Music: Pixabay. Sounds: Kenney (CC0). Font: Michroma (OFL). Icons: Phosphor (MIT).</p>
       <p class="fine">AI use: the team logo is AI-generated; code, code-drawn art and text were made with AI assistance and checked by the team. ORION, SCOUT and Base Alpha are fiction. NASA does not endorse this game.</p>`);
     const bind = (id, fn) => { $(id).onclick = () => { const on = $(id).getAttribute('aria-checked') !== 'true'; $(id).setAttribute('aria-checked', on); sfx('tap'); fn(on); }; };
     bind('t-music', (on) => { S.musicOn = on; musicVolume(Music.cur); }); $('t-vol').oninput = (e) => { S.musicVol = e.target.value / 100; musicVolume(Music.cur); };
+    $('t-test').onclick = () => { S.unlocked = true; pickVoice(); speak(['nasa_first']); setTimeout(() => { const n = $('voice-name'); if (n) n.textContent = 'Voice in use: ' + Voice.name + ('speechSynthesis' in window ? ' · ' + speechSynthesis.getVoices().length + ' voices on this device' : ''); }, 400); };
     bind('t-voice', (on) => { S.voiceOn = on; if (!on) hush(); }); bind('t-low', (on) => { S.lowfx = on; document.body.classList.toggle('lowfx', on); }); bind('t-calm', (on) => { S.calm = on; document.body.classList.toggle('calm', on); });
   }
   function sheetShelf() { hush(); openSheet(`<h2>Badges</h2><div class="badges">${BADGES.map((b) => badgeHtml(b, S.shelf.has(b.id))).join('')}</div><p class="fine">Badges are earned by what you do. They stay here for this session.</p>`); }

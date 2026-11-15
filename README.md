@@ -68,8 +68,10 @@ The manifests are `.js` rather than `.json` so the game also runs from a double-
 
 ## Next version
 
-Badges as medals with reveal cards · Ana's recorded voice (run `scripts/make_voice.py`) · the full sound map · realistic pre-rendered world textures · Calm / Normal / Intense effect levels · a Mars environment pack.
+Badges as medals with reveal cards · Ana's recorded Kokoro voice inside the app (`scripts/make_voice.py` is ready) · the full sound map · realistic pre-rendered world textures · Calm / Normal / Intense effect levels · a Mars environment pack.
 
 ## Credits, licence, AI use
+
+**Contains an AI-generated logo and AI-generated voice.** The logo carries an "AI-generated" label in the game; Ana's voice is synthetic (browser speech in the game, Kokoro-82M in the demo video).
 
 See `CREDITS.md`. Code and code-drawn art: MIT (`LICENSE`). NASA does not endorse this project; no NASA marks are used.

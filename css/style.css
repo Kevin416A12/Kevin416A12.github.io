@@ -203,3 +203,20 @@ body.lowfx #bg { filter: none; opacity: .2; } body.lowfx #dec, body.lowfx .glass
 body.lowfx #fx { display: none; } body.lowfx *, body.calm * { animation-duration: .01s !important; animation-iteration-count: 1 !important; }
 body.lowfx #stage.storm, body.calm #stage.storm { box-shadow: 0 0 0 3px var(--orange); }
 @media (prefers-reduced-motion: reduce) { * { animation-duration: .01s !important; animation-iteration-count: 1 !important; transition-duration: .15s !important; } }
+
+/* ---------- liquid glass (default) ----------
+   Strong blur, translucent tint and a bright top edge on every panel. "Low effects" in
+   Settings turns it off. Chips that sit on the bright scene stay more opaque so text stays readable. */
+:root { --glass: rgba(28, 46, 74, .44); --glass-strong: rgba(28, 46, 74, .74); --glass-blur: blur(28px) saturate(1.6); --glass-edge: inset 0 1px 0 rgba(244, 241, 234, .3), inset 0 0 0 1px rgba(244, 241, 234, .14), 0 10px 30px rgba(4, 8, 18, .28); }
+#bg { filter: blur(24px) brightness(.6) saturate(1.25); opacity: 1; }
+#screen::after { background: rgba(9, 22, 43, .36); }
+.res, #bubble, #dec, .signal, .round { background: var(--glass); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: var(--glass-edge); }
+.pill, .glassbtn, #btn-ask, .ntag i { background: var(--glass-strong); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
+.opt { background: rgba(40, 63, 91, .6); } .opt.sel { background: rgba(60, 92, 128, .82); }
+#banner, #sheet, .sheetcard, #pop { background: rgba(28, 46, 74, .8); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
+#overlay { background: rgba(6, 14, 28, .62); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); } #overlay.clear { background: rgba(6, 14, 28, .4); }
+.signal.low { box-shadow: inset 0 0 0 2px var(--orange), 0 10px 30px rgba(4, 8, 18, .28); }
+.ai { font-size: 9px; padding: 1px 4px; opacity: .85; }
+body.lowfx .res, body.lowfx #bubble, body.lowfx #dec, body.lowfx .signal, body.lowfx .round, body.lowfx .pill, body.lowfx .glassbtn, body.lowfx #btn-ask, body.lowfx .ntag i, body.lowfx #banner, body.lowfx #sheet, body.lowfx .sheetcard, body.lowfx #pop, body.lowfx #overlay { -webkit-backdrop-filter: none; backdrop-filter: none; }
+body.lowfx .res, body.lowfx #bubble, body.lowfx #dec, body.lowfx .signal, body.lowfx .round, body.lowfx .pill, body.lowfx .glassbtn, body.lowfx #btn-ask, body.lowfx #banner, body.lowfx #sheet, body.lowfx .sheetcard, body.lowfx #pop { background: var(--s700); }
+body.lowfx .opt { background: var(--s500); } body.lowfx #overlay { background: rgba(6, 14, 28, .88); } body.lowfx #bg { filter: none; opacity: .2; } body.lowfx #screen::after { background: rgba(9, 22, 43, .7); }

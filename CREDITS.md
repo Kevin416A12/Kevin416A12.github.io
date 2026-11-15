@@ -47,8 +47,10 @@ Ana's lines use the browser's built-in speech. `scripts/make_voice.py` can gener
 
 ## AI-use declaration
 
+**Contains an AI-generated logo and AI-generated voice.**
+
 - **Team logo** (`assets/brand/logo.png`): AI-generated. It carries a visible "AI-generated" label wherever it appears in the game.
 - **Code, code-drawn artwork (scenes, SCOUT, ORION, Ana, icons we drew), tests and documentation:** written with AI assistance (Claude by Anthropic) and reviewed by the team.
-- **Ana's voice:** synthetic (browser speech now; Kokoro-82M if clips are generated).
+- **Ana's voice:** synthetic. In the game: the browser's built-in speech. In the demo video: Kokoro-82M (Apache 2.0), voice `af_heart`.
 - **Data processing scripts:** written with AI assistance; the team downloaded the NASA data and checked the numbers against the source files.
 - Music and sound effects are not AI-generated.
