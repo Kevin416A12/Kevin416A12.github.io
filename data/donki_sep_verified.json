@@ -1,0 +1,10 @@
+{
+ "event_type":"SEP",
+ "activity_id":"2024-05-11T04:07:00-SEP-001",
+ "observed_at_utc":"2024-05-11T04:07:00Z",
+ "detector":"STEREO A",
+ "notification_id":"20240511-AL-013",
+ "source_url":"https://kauai.ccmc.gsfc.nasa.gov/DONKI/view/Alert/30728/1",
+ "source_status":"verified_historical_notification_not_direct_api_download",
+ "note":"Registro histórico real. No indica dosis en la Luna ni riesgos específicos para esta misión ficticia."
+}

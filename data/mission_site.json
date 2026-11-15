@@ -1,0 +1,37 @@
+{
+  "mission": "Operation Lost Rover",
+  "region": "Connecting Ridge, lunar south pole",
+  "coordinate_convention": "degrees, south negative, east positive / west negative, planetocentric assumed pending GIS CRS check",
+  "lunar_mean_radius_km": 1737.4,
+  "locations": {
+    "base_alpha": {
+      "lat_deg": -89.4632,
+      "lon_deg": -137.49,
+      "real_reference": "NASA Lunar Surface Data Book ACD-50044, Table A2-2, R01/Site01 Connecting Ridge",
+      "role": "fictional base centered at published reference point",
+      "not_verified": ["landing suitability", "local illumination", "communications", "habitat construction"]
+    },
+    "orion7_last_known": {
+      "lat_deg": -89.491,
+      "lon_deg": -138.352,
+      "real_reference": "2026 Journal of Geophysical Research: Planets, 10.1029/2025JE009434, Appendix A CR07 representative candidate site",
+      "role": "fictional rover location using published candidate coordinate",
+      "not_verified": ["surface traversability", "actual rover presence", "line of sight"]
+    }
+  },
+  "derived": {
+    "surface_great_circle_distance_km": 0.876,
+    "distance_method": "spherical great circle, radius 1737.4 km; not navigable route length",
+    "route_distance_km": null,
+    "slope_degrees": null,
+    "line_of_sight": null,
+    "illumination_fraction": null
+  },
+  "data_sources": {
+    "nasa_site_coordinates": "https://ntrs.nasa.gov/api/citations/20230007818/downloads/ACD-50044%20Lunar%20Surface%20Data%20Book%20Rev%20A.pdf",
+    "cr07_coordinates": "https://doi.org/10.1029/2025JE009434",
+    "lola_5m_dem_and_slope": "https://pgda.gsfc.nasa.gov/data/LOLA_5mpp/",
+    "lroc_illumination": "https://data.lroc.im-ldi.com/lroc/view_rdr/WAC_POLE_ILL_PCT_SOUTH",
+    "moon_trek": "https://trek.nasa.gov/moon/"
+  }
+}

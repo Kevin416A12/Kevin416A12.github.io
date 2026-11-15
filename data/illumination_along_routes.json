@@ -1,0 +1,87 @@
+{
+  "status": "computed_approximation",
+  "method": "DEM horizon angles, 72 azimuths, 3 km range, 1 m observer height",
+  "dem_nodata_share_in_window": 0.0,
+  "routes": {
+    "direct": {
+      "points_sampled": 38,
+      "annual_cycle_estimate": {
+        "mean": 0.5,
+        "min": 0.285,
+        "note": "Sun elevation modeled as 1.5 deg*sin(phase) over a year (below horizon half the time)"
+      },
+      "sunlit_fraction_by_sun_elevation": {
+        "0.5deg": {
+          "mean": 0.558,
+          "min": 0.333,
+          "share_of_route_below_50pct": 0.421
+        },
+        "1.0deg": {
+          "mean": 0.663,
+          "min": 0.5,
+          "share_of_route_below_50pct": 0.0
+        },
+        "1.5deg": {
+          "mean": 0.747,
+          "min": 0.528,
+          "share_of_route_below_50pct": 0.0
+        }
+      }
+    },
+    "balanced": {
+      "points_sampled": 39,
+      "annual_cycle_estimate": {
+        "mean": 0.537,
+        "min": 0.339,
+        "note": "Sun elevation modeled as 1.5 deg*sin(phase) over a year (below horizon half the time)"
+      },
+      "sunlit_fraction_by_sun_elevation": {
+        "0.5deg": {
+          "mean": 0.61,
+          "min": 0.347,
+          "share_of_route_below_50pct": 0.205
+        },
+        "1.0deg": {
+          "mean": 0.701,
+          "min": 0.472,
+          "share_of_route_below_50pct": 0.051
+        },
+        "1.5deg": {
+          "mean": 0.788,
+          "min": 0.556,
+          "share_of_route_below_50pct": 0.0
+        }
+      }
+    },
+    "flattest": {
+      "points_sampled": 57,
+      "annual_cycle_estimate": {
+        "mean": 0.623,
+        "min": 0.405,
+        "note": "Sun elevation modeled as 1.5 deg*sin(phase) over a year (below horizon half the time)"
+      },
+      "sunlit_fraction_by_sun_elevation": {
+        "0.5deg": {
+          "mean": 0.721,
+          "min": 0.444,
+          "share_of_route_below_50pct": 0.035
+        },
+        "1.0deg": {
+          "mean": 0.8,
+          "min": 0.514,
+          "share_of_route_below_50pct": 0.0
+        },
+        "1.5deg": {
+          "mean": 0.866,
+          "min": 0.569,
+          "share_of_route_below_50pct": 0.0
+        }
+      }
+    }
+  },
+  "notes": [
+    "The 0.5/1.0/1.5 deg scenarios assume the Sun is UP at that elevation (sunny season); they are NOT annual averages. Use annual_cycle_estimate for a yearly figure. Compare routes with each other.",
+    "Sun elevation at the lunar south pole stays within roughly 1.5 deg of the horizon; scenarios 0.5/1.0/1.5 deg.",
+    "Point-source Sun; no ephemeris or time series; terrain outside the downloaded tile ignored."
+  ]
+}

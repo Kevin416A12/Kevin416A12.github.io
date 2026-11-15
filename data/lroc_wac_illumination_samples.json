@@ -1,0 +1,18 @@
+{
+  "status": "measured",
+  "product": "WAC_POLE_ILL_PCT_SOUTH_100M v1.3 (LROC WAC, 100 m/px, 88-90 S)",
+  "period": "images from 15 Feb 2010 to 5 Feb 2011 (one lunar year of observations)",
+  "meaning": "percent of observations in which the pixel was sunlit, at surface level",
+  "samples_percent": {
+    "base_alpha_pixel": 33.34,
+    "base_alpha_500m_block": {"mean": 37.39, "min": 30.66, "max": 48.22},
+    "orion7_last_known_pixel": 32.41,
+    "orion7_500m_block": {"mean": 37.21, "min": 20.49, "max": 55.02},
+    "straight_line_base_to_rover": {"distinct_100m_pixels": 2, "mean": 33.2, "min": 27.33, "max": 36.69}
+  },
+  "limits": [
+    "100 m pixels: the 876 m trip covers only 2 distinct pixels, so routes cannot be compared with this map.",
+    "Binary threshold per image and a single year (2010-11); other years differ."
+  ],
+  "citation": "Speyerer, E. J., & Robinson, M. S. (2013). Persistently illuminated regions at the lunar poles: Ideal sites for future exploration. Icarus, 222(1), 122-136. https://doi.org/10.1016/j.icarus.2012.10.010"
+}

@@ -1,0 +1,59 @@
+{
+  "status": "computed",
+  "straight_line_m": 876.1,
+  "grid_m_per_px": 5.0,
+  "slope_limit_deg": 15.0,
+  "speed_assumptions": {
+    "top_speed_m_s": 0.2,
+    "prospecting_speed_m_s": 0.1,
+    "speed_made_good_m_s": 0.008,
+    "sources": [
+      "https://ntrs.nasa.gov/api/citations/20250004148/downloads/viper-2025-04-24.pdf (20 cm/s max driving speed; 0.8 cm/s Speed Made Good; 15 deg slope design limit)",
+      "https://ntrs.nasa.gov/citations/20230004239 (up to 20 cm/s on flat terrain; effective speed ~1 cm/s after commanding, localization, navigation and obstacle-avoidance delays)"
+    ],
+    "caveat": "VIPER is a teleoperated robotic rover, used here as an analog. Replace if the mission rover is a different vehicle."
+  },
+  "routes": {
+    "direct": {
+      "description": "Shortest path that avoids slopes above the limit",
+      "length_m": 932.6,
+      "length_3d_m": 933.8,
+      "max_slope_deg": 11.5,
+      "mean_slope_deg": 3.95,
+      "ascent_m": 10.7,
+      "descent_m": 26.6,
+      "drive_hours_at_top_speed": 1.3,
+      "drive_hours_at_prospecting_speed": 2.59,
+      "drive_hours_at_speed_made_good": 32.4
+    },
+    "balanced": {
+      "description": "Trades some length for gentler slopes",
+      "length_m": 947.3,
+      "length_3d_m": 948.1,
+      "max_slope_deg": 6.73,
+      "mean_slope_deg": 2.57,
+      "ascent_m": 8.9,
+      "descent_m": 24.8,
+      "drive_hours_at_top_speed": 1.32,
+      "drive_hours_at_prospecting_speed": 2.63,
+      "drive_hours_at_speed_made_good": 32.9
+    },
+    "flattest": {
+      "description": "Strongly prefers flat ground, even if longer",
+      "length_m": 1329.7,
+      "length_3d_m": 1330.6,
+      "max_slope_deg": 4.42,
+      "mean_slope_deg": 2.01,
+      "ascent_m": 13.8,
+      "descent_m": 29.6,
+      "drive_hours_at_top_speed": 1.85,
+      "drive_hours_at_prospecting_speed": 3.7,
+      "drive_hours_at_speed_made_good": 46.2
+    }
+  },
+  "notes": [
+    "Routes are least-cost paths on a 5 m/px slope raster, not verified safe paths.",
+    "Boulders, small craters, soil softness and shadow are NOT modeled.",
+    "Drive time excludes stops (diagnosis, comms, sampling, setup)."
+  ]
+}

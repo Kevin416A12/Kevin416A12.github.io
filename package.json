@@ -1,0 +1,14 @@
+{
+  "name": "saving-rover-orion",
+  "version": "0.7.0",
+  "private": true,
+  "description": "Junior Astronaut Mission Trainer: Saving Rover Orion (NASA Space Apps 2026)",
+  "scripts": {
+    "build:data": "node tools/build_data.mjs",
+    "test": "node --test tests/engine.test.mjs",
+    "balance": "node tools/balance_report.mjs",
+    "voice": "node tools/build_voice_lines.mjs",
+    "colours": "node tools/check_colours.mjs",
+    "serve": "python3 -m http.server 8000"
+  }
+}

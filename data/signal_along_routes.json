@@ -1,0 +1,33 @@
+{
+  "status": "computed_model",
+  "method": "Terrain line of sight from each route point to Base Alpha, LOLA 5 m DEM, curvature included",
+  "antenna_heights_m": {
+    "base": 2.0,
+    "scout": 2.0
+  },
+  "routes": {
+    "direct": {
+      "share_of_route_with_line_of_sight": 0.373,
+      "longest_blackout_m": 470.0,
+      "signal_at_rover_spot": false,
+      "min_clearance_m": -9.57
+    },
+    "balanced": {
+      "share_of_route_with_line_of_sight": 0.377,
+      "longest_blackout_m": 480.0,
+      "signal_at_rover_spot": false,
+      "min_clearance_m": -5.35
+    },
+    "flattest": {
+      "share_of_route_with_line_of_sight": 0.307,
+      "longest_blackout_m": 560.0,
+      "signal_at_rover_spot": false,
+      "min_clearance_m": -5.86
+    }
+  },
+  "notes": [
+    "Line of sight only: a blocked path means no direct radio link in this simple model.",
+    "Antenna heights are game values; SCOUT mast height follows VIPER (~2 m).",
+    "No relays, diffraction or Earth link modelled."
+  ]
+}
