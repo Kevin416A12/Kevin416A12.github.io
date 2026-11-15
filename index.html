@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#09162B">
+<title>Junior Astronaut Mission Trainer — Saving Rover Orion</title>
+<meta name="description" content="Drive SCOUT across real Moon terrain to save the lost rover ORION. A junior astronaut mission trainer built on real NASA data.">
+<link rel="icon" href="assets/brand/logo.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="shell">
+  <div id="bezel">
+    <div id="screen">
+      <div id="bg" aria-hidden="true"></div>
+      <div id="ui">
+        <header id="top">
+          <div class="brand"><img src="assets/brand/logo.png" alt="Saving Rover Orion team logo"><span class="ai">AI-generated</span></div>
+          <div id="progress" role="status"></div>
+          <div id="signal" class="signal" role="status"></div>
+          <button class="round" id="btn-shelf" aria-label="Badges"><span class="ic"></span><b id="shelf-count">0</b></button>
+          <button class="round" id="btn-sound" aria-pressed="true" aria-label="Sound"><span class="ic"></span></button>
+          <button class="round" id="btn-settings" aria-label="Settings"><span class="ic"></span></button>
+        </header>
+        <section id="hud" aria-label="SCOUT's resources"></section>
+        <section id="stage" aria-label="Mission view">
+          <div id="scene"></div>
+          <div id="stage-title" class="pill"></div>
+          <button id="btn-know" class="glassbtn"><span class="ic"></span><span>How do we know?</span></button>
+          <div id="tags"></div>
+          <div id="lapse" class="pill small"></div>
+          <div id="log" class="pill"></div>
+          <div id="illus" class="pill small">Illustration based on NASA LOLA terrain</div>
+          <div id="stamp" aria-hidden="true"></div>
+        </section>
+        <section id="ana" aria-label="Ana, junior astronaut">
+          <div id="portrait"></div>
+          <div id="bubble" role="status" aria-live="polite"><b id="who">Ana</b><span id="caption"></span><button id="btn-ask"><span class="ic"></span>Ask Ana</button></div>
+        </section>
+        <section id="dec" aria-live="polite"></section>
+      </div>
+      <div id="dim"></div>
+      <div id="pop" role="dialog"></div>
+      <div id="banner" role="dialog" aria-live="assertive"></div>
+      <div id="sheet" role="dialog" aria-modal="true"><div class="handle" id="sheet-handle"><i></i></div><div id="sheet-body"></div></div>
+      <div id="overlay"></div>
+      <div id="sigfx" aria-hidden="true"></div>
+      <div id="toast" role="status"></div>
+      <canvas id="fx" aria-hidden="true"></canvas>
+    </div>
+  </div>
+  <div id="rotate"><div><div class="rot-ic"></div><p>Rotate your device</p><small>This mission plays in landscape.</small></div></div>
+</div>
+<script src="js/data.js"></script>
+<script src="js/pack_moon.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/lines.js"></script>
+<script src="audio/music/music.js"></script>
+<script src="audio/sfx/sfx.js"></script>
+<script src="audio/voice/ana/voice.js"></script>
+<script src="js/icons.js"></script>
+<script src="js/art.js"></script>
+<script src="js/ui.js"></script>
+</body>
+</html>
