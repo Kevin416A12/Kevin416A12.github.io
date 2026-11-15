@@ -1,7 +1,7 @@
 # Changelog
 
 ## 0.7.2 — 2026-11-15
-
+- Test
 - Ana's speech bubble is smaller so it covers less of the scene.
 - The AI-generated note moved from under the logo to Settings (Credits & AI use); it stays in CREDITS.md and the README.
 
@@ -30,3 +30,4 @@
 ## 0.6.0 and earlier
 
 Earlier builds used a different name and a crewed-expedition story with an oxygen bar.
+
